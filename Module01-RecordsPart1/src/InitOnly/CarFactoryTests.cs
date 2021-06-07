@@ -12,6 +12,7 @@ namespace InitOnly
     {
         [Theory]
         [InlineData("Supra", 340)]
+        [InlineData("Auris", 101)]
         public void CreatesCarWithValues(string name, int hp)
         {
             var car = CarFactory.CreateCar<Toyota>(name, hp);
@@ -24,23 +25,28 @@ namespace InitOnly
 
     class CarFactory
     {
-        public static ICar CreateCar<TCar>(string name, int horsePower) where TCar : ICar
+        public static ICar CreateCar<TCar>(string name, int horsePower) where TCar : ICar, new()
         {
-            var car = new TCar();
-            car.Name = name;
-            car.HorsePower = horsePower;
+            var car = new TCar
+            {
+                Name = name,
+                HorsePower = horsePower
+            };
             return car;
         }
     }
 
-    class Toyota
+    class Toyota : ICar
     {
+        public string Name { get; init; }
+
+        public int HorsePower { get; init; }
     }
 
     interface ICar
     {
-        string Name { get; set; }
+        string Name { get; init; }
 
-        int HorsePower { get; set; }
+        int HorsePower { get; init; }
     }
 }
