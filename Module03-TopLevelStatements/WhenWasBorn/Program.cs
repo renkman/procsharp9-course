@@ -1,30 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 
-// TODO: As a top-level statements exercise, use only this single file to define everything!
-
 if (args.Length != 1)
 {
-    // TODO: define local PrintHelp function to print help and exit
+    PrintHelp();
 }
 
-// TODO: utilize https://swapi.dev/ to search for a person with a given name
-//       Hint: Use https://swapi.dev/documentation and look for "Searching"
+void PrintHelp()
+{
+    Console.WriteLine("Searches for Star Wars characters by using the Star Wars API.");
+    Console.WriteLine("Usage:");
+    Console.WriteLine("\tWhenWasBorn.exe <NAME>");
+    Console.WriteLine("\tSearches for the character with the name NAME and prints out their name and birth year.");
+    Environment.Exit(0);
+} 
+
 using HttpClient client = new HttpClient();
-var requestUri = "?";
+var requestUri = $"https://swapi.dev/api/people/?search={args[0]}";
 var response = await client.GetFromJsonAsync<PersonsDTO>(requestUri);
 
 if (response?.Count != 1)
-{
     Console.WriteLine("There is no single answer to your question!");
-}
 else
 {
-    // TODO: 
+    var person = response.Results.Single();
     Console.WriteLine($"{person.Name} was born {person.Birth_Year}.");
 }
 
-// TODO: define PersonDTO and PersonsDTO records to deserialize (only necessary)
-//       fields from https://swapi.dev/api/people/?search=... results.
-
+record PersonDTO(string Name, string Birth_Year);
+record PersonsDTO(int Count, List<PersonDTO> Results);
