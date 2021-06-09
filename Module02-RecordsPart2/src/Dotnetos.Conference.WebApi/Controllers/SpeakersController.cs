@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Dotnetos.Conference.WebApi.Repository;
 using Microsoft.Extensions.Logging;
